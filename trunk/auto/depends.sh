@@ -388,13 +388,19 @@ if [ $SRS_EXPORT_LIBRTMP_PROJECT = NO ]; then
 
     # copy players to nginx html dir.
     rm -rf ${SRS_OBJS}/nginx/html/players &&
-    ln -sf `pwd`/research/players ${SRS_OBJS}/nginx/html/players &&
-    rm -f ${SRS_OBJS}/nginx/crossdomain.xml &&
-    ln -sf `pwd`/research/players/crossdomain.xml ${SRS_OBJS}/nginx/html/crossdomain.xml
+    ln -sf `pwd`/research/players ${SRS_OBJS}/nginx/html/players
+
+    # For srs-console.
+    rm -rf ${SRS_OBJS}/nginx/html/console &&
+    ln -sf `pwd`/research/console ${SRS_OBJS}/nginx/html/console
 
     # for favicon.ico
     rm -rf ${SRS_OBJS}/nginx/html/favicon.ico &&
     ln -sf `pwd`/research/api-server/static-dir/favicon.ico ${SRS_OBJS}/nginx/html/favicon.ico
+
+    # For home page index.html
+    rm -rf ${SRS_OBJS}/nginx/html/index.html &&
+    ln -sf `pwd`/research/api-server/static-dir/index.html ${SRS_OBJS}/nginx/html/index.html
 
     # nginx.html to detect whether nginx is alive
     echo "Nginx is ok." > ${SRS_OBJS}/nginx/html/nginx.html
