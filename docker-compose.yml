@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+    api:
+        build: "./callbackServer"
+        ports:
+            - "8085:8085"
+    live:
+        image: "ossrs/srs:3"
+        ports:
+            - "1935:1935"
+            - "1985:1985"
+            - "8080:8080"
+        volumes:
+            - ${PWD}/conf/srs.conf:/usr/local/srs/conf/srs.conf
+            - ${PWD}/srs.log:/usr/local/srs/objs/srs.log
+        depends_on:
+            - api
+    # player:
+    #     build: "./plyr"
+    #     ports:
+    #         - "3000:3000"
+
