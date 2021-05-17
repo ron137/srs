@@ -51,12 +51,12 @@ const paths = {
   ],
 };
 
-// Get branch info
-const branch = {
-  current: gitbranch.sync(),
-  master: 'master',
-  beta: 'beta',
-};
+// // Get branch info
+// const branch = {
+//   current: gitbranch.sync(),
+//   master: 'master',
+//   beta: 'beta',
+// };
 
 const maxAge = 31536000; // 1 year
 const options = {
@@ -66,7 +66,7 @@ const options = {
     },
   },
   demo: {
-    uploadPath: branch.current === branch.beta ? '/beta' : null,
+    uploadPath: null,
     headers: {
       'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
     },
@@ -99,13 +99,13 @@ const renameFile = rename((p) => {
 
 // Check we're on the correct branch to deploy
 const canDeploy = () => {
-  const allowed = [branch.master, branch.beta];
+  // const allowed = [branch.master, branch.beta];
 
-  if (!allowed.includes(branch.current)) {
-    console.error(`Must be on ${allowed.join(', ')} to publish! (current: ${branch.current})`);
+  // if (!allowed.includes(branch.current)) {
+  //   console.error(`Must be on ${allowed.join(', ')} to publish! (current: ${branch.current})`);
 
-    return false;
-  }
+  //   return false;
+  // }
 
   return true;
 };
@@ -195,9 +195,9 @@ gulp.task('demo', (done) => {
   const error = `${paths.demo}error.html`;
   const pages = [index];
 
-  if (branch.current === branch.master) {
+  // if (branch.current === branch.master) {
     pages.push(error);
-  }
+  // }
 
   return gulp
     .src(pages)
@@ -220,7 +220,7 @@ gulp.task('open', () => {
 
   return gulp.src(__filename).pipe(
     open({
-      uri: `https://${domain}/${branch.current === branch.beta ? 'beta' : ''}`,
+      uri: `https://${domain}/`,
     }),
   );
 });
