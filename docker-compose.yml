@@ -15,8 +15,8 @@ services:
             - ${PWD}/srs.log:/usr/local/srs/objs/srs.log
         depends_on:
             - api
-    # player:
-    #     build: "./plyr"
-    #     ports:
-    #         - "3000:3000"
+    player:
+        build: "./plyr"
+        ports:
+            - "3000:3000"
 

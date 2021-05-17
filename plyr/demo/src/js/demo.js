@@ -67,7 +67,7 @@ import toggleClass from './toggle-class';
       },
     });
 
-    const source = "http://127.0.0.1:8080/live/livestream_720.m3u8"
+    const source = "http://3.66.110.204:8080/live/livestream_720.m3u8"
     const video = document.querySelector('video')
 
     if (!Hls.isSupported()) {
