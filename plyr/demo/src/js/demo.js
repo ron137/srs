@@ -61,6 +61,7 @@ import toggleClass from './toggle-class';
         enabled: true,
         src: ['https://cdn.plyr.io/static/demo/thumbs/100p.vtt', 'https://cdn.plyr.io/static/demo/thumbs/240p.vtt'],
       },
+      fullscreen: { enabled: true, fallback: true, iosNative: true },
       vimeo: {
         // Prevent Vimeo blocking plyr.io demo site
         referrerPolicy: 'no-referrer',
