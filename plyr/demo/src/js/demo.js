@@ -70,7 +70,7 @@ import toggleClass from './toggle-class';
       },
     });
 
-    const source = "http://3.66.110.204:8080/live/master.m3u8"
+    const source = "http://3.66.110.204:8080/live/livestream/master.m3u8"
     // const source = "http://localhost:8080/live/streaming/master.m3u8"
 
     const video = document.querySelector('video')
