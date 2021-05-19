@@ -71,7 +71,7 @@ import toggleClass from './toggle-class';
     });
 
     const source = "http://35.157.15.116:8080/live/livestream/master.m3u8"
-    // const source = "http://localhost:8080/live/streaming/master.m3u8"
+    // const source = "http://localhost:8080/live/livestream/master.m3u8"
 
     const video = document.querySelector('video')
 
@@ -80,16 +80,16 @@ import toggleClass from './toggle-class';
     } else {
       // For more Hls.js options, see https://github.com/dailymotion/hls.js
       const hls = new Hls({
-        // liveSyncDuration: 6,
-        // liveMaxLatencyDuration: 10,
-        // maxLiveSyncPlaybackRate: 2,
-        // liveDurationInfinity: true,
-        // backBufferLength: 12,
+        liveSyncDuration: 10,
+        liveMaxLatencyDuration: 30,
+        maxLiveSyncPlaybackRate: 2,
+        liveDurationInfinity: true,
+        backBufferLength: 20,
         debug: true,
         appendErrorMaxRetry: Infinity,
         levelLoadingMaxRetry: Infinity,
         // capLevelToPlayerSize: false,
-        // startLevel: -1,
+        startLevel: -1,
         // testBandwidth: false,
         // abrEwmaDefaultEstimate: 1200000
       });
