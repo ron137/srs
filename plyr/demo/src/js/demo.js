@@ -10,6 +10,7 @@ import 'url-polyfill';
 
 import * as Sentry from '@sentry/browser';
 import Shr from 'shr-buttons';
+import Hls from 'hls.js'
 
 import Plyr from '../../../src/js/plyr';
 import sources from './sources';
@@ -44,6 +45,7 @@ import toggleClass from './toggle-class';
       debug: true,
       title: 'View From A Blue Moon',
       iconUrl: 'dist/demo.svg',
+      autoplay: true,
       keyboard: {
         global: true,
       },
@@ -68,14 +70,29 @@ import toggleClass from './toggle-class';
       },
     });
 
-    const source = "http://3.66.110.204:8080/live/livestream_720.m3u8"
+    const source = "http://3.66.110.204:8080/live/master.m3u8"
+    // const source = "http://localhost:8080/live/streaming/master.m3u8"
+
     const video = document.querySelector('video')
 
     if (!Hls.isSupported()) {
       video.src = source;
     } else {
       // For more Hls.js options, see https://github.com/dailymotion/hls.js
-      const hls = new Hls();
+      const hls = new Hls({
+        // liveSyncDuration: 6,
+        // liveMaxLatencyDuration: 10,
+        // maxLiveSyncPlaybackRate: 2,
+        // liveDurationInfinity: true,
+        // backBufferLength: 12,
+        debug: true,
+        appendErrorMaxRetry: Infinity,
+        levelLoadingMaxRetry: Infinity,
+        // capLevelToPlayerSize: false,
+        // startLevel: -1,
+        // testBandwidth: false,
+        // abrEwmaDefaultEstimate: 1200000
+      });
       hls.loadSource(source);
       hls.attachMedia(video);
       window.hls = hls;
@@ -86,6 +103,8 @@ import toggleClass from './toggle-class';
         setTimeout(() => hls.subtitleTrack = player.currentTrack, 50);
       });
     }
+
+    
 
     // Expose for tinkering in the console
     window.player = player;
