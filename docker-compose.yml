@@ -12,7 +12,7 @@ services:
             - "8080:8080"
         volumes:
             - ${PWD}/conf/srs.conf:/usr/local/srs/conf/srs.conf
-            - ${PWD}/srs.log:/usr/local/srs/objs/srs.log
+            # - ${PWD}/srs.log:/usr/local/srs/objs/srs.log
         depends_on:
             - api
         extra_hosts:
