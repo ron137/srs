@@ -5,7 +5,7 @@ docker compose up
 
 Read logs:
     tail -f srs.log
-    docker-compose exec live tail /usr/local/srs/objs/srs.log
+    docker-compose exec live tail -f /usr/local/srs/objs/srs.log
 
 Enter the container:
     docker-compose exec live /bin/bash   
