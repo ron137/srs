@@ -80,16 +80,16 @@ import toggleClass from './toggle-class';
     } else {
       // For more Hls.js options, see https://github.com/dailymotion/hls.js
       const hls = new Hls({
-        liveSyncDuration: 10,
-        liveMaxLatencyDuration: 30,
+        liveSyncDurationCount: 3,
+        liveMaxLatencyDurationCount: 30,
         maxLiveSyncPlaybackRate: 2,
         liveDurationInfinity: true,
-        backBufferLength: 20,
+        // backBufferLength: 20,
         debug: true,
         appendErrorMaxRetry: Infinity,
         levelLoadingMaxRetry: Infinity,
         // capLevelToPlayerSize: false,
-        startLevel: -1,
+        // startLevel: -1,
         // testBandwidth: false,
         // abrEwmaDefaultEstimate: 1200000
       });
