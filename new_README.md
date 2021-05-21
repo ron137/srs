@@ -6,7 +6,8 @@ docker run --rm --name srs -p 1935:1935 -p 1985:1985 -p 8080:8080 \
     ossrs/srs:3
 
 Read logs:
-    docker exec -it srs tail -f ./objs/srs.log
+    docker-compose exec live tail -f /usr/local/srs/objs/srs.log
+
 
 Publish Using FFMPEG
 
@@ -16,7 +17,6 @@ do \
         -vcodec copy -acodec copy \
         -f flv -y rtmp://127.0.0.1/live/livestream; \
 done
-
 
 
 
