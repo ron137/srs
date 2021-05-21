@@ -42,11 +42,11 @@ import toggleClass from './toggle-class';
     if (Hls.isSupported()) {
       // For more Hls.js options, see https://github.com/dailymotion/hls.js
       const hls = new Hls({
-        // liveSyncDuration: 15,
-        // liveMaxLatencyDuration: 40,
-        // maxLiveSyncPlaybackRate: 1.5,
+        liveSyncDuration: 15,
+        liveMaxLatencyDuration: 40,
+        maxLiveSyncPlaybackRate: 1.5,
         liveDurationInfinity: true,
-        // // backBufferLength: 40,
+        // backBufferLength: 40,
         debug: true,
         appendErrorMaxRetry: Infinity,
         levelLoadingMaxRetry: Infinity,
