@@ -30,7 +30,7 @@ import toggleClass from './toggle-class';
       fullscreen: { enabled: true, fallback: true, iosNative: true },
       settings: ['quality'],
       controls: ['play-large', 'play', 'current-time', 'mute', 'volume', 'settings', 'pip', 'airplay', 'fullscreen'],
-      speed: { selected: 1, options: [1] },
+      // speed: { selected: 1, options: [1, 1.5] },
       autoplay: true,
       i18n: {
         qualityLabel: {
@@ -86,6 +86,7 @@ import toggleClass from './toggle-class';
   
         // Initialize new Plyr player with quality options
         const player = new Plyr(selector, defaultOptions);
+        player.speed = 1
         window.player = player;
       });
       hls.attachMedia(video);
