@@ -94,6 +94,9 @@ import toggleClass from './toggle-class';
     } else {
       // default options with no quality update in case Hls is not supported
       const player = new Plyr(selector, defaultOptions);
+      player.speed = 1
+      window.player = player;
+      video.src = source
     }
   
     function updateQuality(newQuality) {
