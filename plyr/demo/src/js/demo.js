@@ -22,8 +22,11 @@ import toggleClass from './toggle-class';
   document.addEventListener('DOMContentLoaded', () => {
     const selector = '#player';
     // const source = "https://30af609b0200.eu-west-1.playback.live-video.net/api/video/v1/eu-west-1.677470251420.channel.oPqrMMlCOjbK.m3u8"
-    const source = "http://35.157.15.116:8080/live/livestream/master.m3u8"
+    const source = "http://35.157.15.116/live/livestream/master.m3u8"
     // const source = "http://localhost:8080/live/livestream/master.m3u8"
+    // var source = "http://192.168.2.164:80/livestream/master.m3u8"
+    // var source = "http://kakastream.io:80/livestream/master.m3u8"
+
     const video = document.querySelector('video')
 
     const defaultOptions = {
@@ -41,27 +44,68 @@ import toggleClass from './toggle-class';
 
     if (Hls.isSupported()) {
       // For more Hls.js options, see https://github.com/dailymotion/hls.js
+
+    //   class loader extends Hls.DefaultConfig.loader {
+    //     constructor(config) {
+    //         super(config);
+    //         var load = this.load.bind(this);
+    //         this.load = async function(context, config, callbacks) {
+    //             if(streamingToken) {
+    //               context.url = context.url + '?token=' + streamingToken;
+    //             }
+    //             load(context, config, callbacks);
+    //         };
+    //     }
+    // }
+    
+
       const hls = new Hls({
         liveSyncDuration: 15,
         liveMaxLatencyDuration: 40,
         maxLiveSyncPlaybackRate: 1.5,
         liveDurationInfinity: true,
+        // loader: loader,
         // backBufferLength: 40,
-        debug: true,
+        // debug: true,
         appendErrorMaxRetry: Infinity,
         levelLoadingMaxRetry: Infinity,
         // // capLevelToPlayerSize: false,
         startLevel: -1,
+        xhrSetup: function (xhr, url) {
+          xhr.withCredentials = true; // do send cookies
+        },
+        // xhrSetup: function (xhr, url) {
+        //   xhr.onload = function() {
+        //     if (!streamingToken) {
+        //       let result = getParameterByName('token', xhr.responseURL)
+        //       if (result) {
+        //         streamingToken = result
+        //       }
+        //     }
+        //   }
+        // },
+        fetchSetup: function (context, initParams) {
+          // Always send cookies, even for cross-origin calls.
+          initParams.credentials = 'include';
+          return new Request(context.url, initParams);
+        },
         // // testBandwidth: false,
         // // abrEwmaDefaultEstimate: 1200000
       });
       hls.loadSource(source);
   
+
+      // hls.on(Hls.Events.MANIFEST_LOADED, function (event, data) {
+      //   console.log('MANIFEST_LOADED')
+      //   if (!streamingToken) {
+      //     streamingToken = getParameterByName('token', data.url)
+      //   }
+      // })
       // From the m3u8 playlist, hls parses the manifest and returns
       // all available video qualities. This is important, in this approach,
       // we will have one source on the Plyr player.
       hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
-  
+        
         // Transform available levels into an array of integers (height values).
         const availableQualities = hls.levels.map((l) => l.height)
         availableQualities.unshift(0)
@@ -76,6 +120,7 @@ import toggleClass from './toggle-class';
         }
 
         hls.on(Hls.Events.LEVEL_SWITCHED, function (event, data) {
+          
           var span = document.querySelector(".plyr__menu__container [data-plyr='quality'][value='0'] span")
           if (hls.autoLevelEnabled) {
             span.innerHTML = `AUTO (${hls.levels[data.level].height}p)`
@@ -98,6 +143,9 @@ import toggleClass from './toggle-class';
       window.player = player;
       video.src = source
     }
+    
+
+
   
     function updateQuality(newQuality) {
       if (newQuality === 0) {
@@ -115,6 +163,15 @@ import toggleClass from './toggle-class';
         });
       }
     }
+
+    function getParameterByName(name, url = window.location.href) {
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
 
   });
 })();

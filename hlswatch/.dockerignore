@@ -1,0 +1,6 @@
+.build/
+.git/
+LICENSE.txt
+README.txt
+Makefile
+Dockerfile
