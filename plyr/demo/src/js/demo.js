@@ -21,9 +21,7 @@ import toggleClass from './toggle-class';
 
   document.addEventListener('DOMContentLoaded', () => {
     const selector = '#player';
-    // const source = "https://30af609b0200.eu-west-1.playback.live-video.net/api/video/v1/eu-west-1.677470251420.channel.oPqrMMlCOjbK.m3u8"
-    const source = "http://35.157.15.116/live/livestream/master.m3u8"
-    // const source = "http://localhost:8080/live/livestream/master.m3u8"
+    const source = "http://35.157.15.116/livestream/master.m3u8"
     // var source = "http://192.168.2.164:80/livestream/master.m3u8"
     // var source = "http://kakastream.io:80/livestream/master.m3u8"
 
