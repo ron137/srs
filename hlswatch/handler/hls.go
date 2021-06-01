@@ -203,8 +203,13 @@ func Hls(ctx *state.State, h http.Handler) http.Handler {
             log.Println("Token:",token, "LastSeen:", viewer.LastSeen)
         }
 
-        // serve the requested file from fs
-        h.ServeHTTP(w, r)
+        if strings.Contains(r.URL.String(), "master.m3u8") {
+            log.Println("Getting master.m3u8")
+            http.ServeFile(w, r, "/tmp/hls/live/master.m3u8")
+        } else {
+            // serve the requested file from fs
+            h.ServeHTTP(w, r)
+        }
     })
 
     return f
