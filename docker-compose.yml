@@ -11,8 +11,8 @@ services:
         volumes:
             - ${PWD}/configs/hlswatch.conf:/etc/hlswatch.conf
             - ${PWD}/configs/http_server_nginx.conf:/etc/nginx/nginx.conf
-            - ./http_server:/tmp/hls/
-            # - ${PWD}/http_server/master.m3u8:/tmp/hls/live/master.m3u8
+            - hls_path:/tmp/hls/
+            - ${PWD}/http_server/live/master.m3u8:/tmp/hls/live/master.m3u8
     live:
         image: "ossrs/srs:3"
         ports:
@@ -21,7 +21,7 @@ services:
             - "8080:8080"
         volumes:
             - ${PWD}/configs/srs.conf:/usr/local/srs/conf/srs.conf
-            - ./http_server:/usr/local/srs/objs/nginx/html
+            - hls_path:/usr/local/srs/objs/nginx/html
         depends_on:
             - api
             - http_server
@@ -33,6 +33,6 @@ services:
         build: "./plyr"
         ports:
             - "3000:3000"
-# volumes:
-#     hls_path:
+volumes:
+    hls_path:
 

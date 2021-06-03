@@ -129,7 +129,7 @@ func getIPAdress(r *http.Request) string {
 func Hls(ctx *state.State, h http.Handler) http.Handler {
     f := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         // headers applicable for all files
-        w.Header().Set("Access-Control-Allow-Origin", "http://" + r.Host + ":3000")
+        w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
         w.Header().Set("Access-Control-Allow-Credentials", "true");  
 
         // We keep track of the concurrent users by watching the

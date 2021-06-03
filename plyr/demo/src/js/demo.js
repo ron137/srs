@@ -64,7 +64,7 @@ import toggleClass from './toggle-class';
         liveDurationInfinity: true,
         // loader: loader,
         // backBufferLength: 40,
-        // debug: true,
+        debug: true,
         appendErrorMaxRetry: Infinity,
         levelLoadingMaxRetry: Infinity,
         // // capLevelToPlayerSize: false,
