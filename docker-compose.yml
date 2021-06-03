@@ -14,7 +14,7 @@ services:
             - hls_path:/tmp/hls/
             - ${PWD}/http_server/live/master.m3u8:/tmp/hls/live/master.m3u8
     live:
-        image: "ossrs/srs:3"
+        image: "registry.cn-hangzhou.aliyuncs.com/ossrs/srs:v4.0.76"
         ports:
             - "1935:1935"
             - "1985:1985"
