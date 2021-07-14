@@ -21,8 +21,9 @@ import toggleClass from './toggle-class';
 
   document.addEventListener('DOMContentLoaded', () => {
     const selector = '#player';
-    // const source = "http://35.157.15.116/livestream/master.m3u8"
-    const source = "http://localhost:80/livestream/master.m3u8"
+    const streamId = getParameterByName('streamId');
+    const source = "https://live.hbhstreaming.com/hls/" + streamId + "/master.m3u8"
+    // const source = "http://localhost:80/livestream/master.m3u8"
     // var source = "http://kakastream.io:80/livestream/master.m3u8"
 
     const video = document.querySelector('video')
