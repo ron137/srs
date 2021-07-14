@@ -21,6 +21,7 @@ package handler
 
 import (
     "strings"
+    "strconv"
     "time"
     "errors"
     "net/http"
@@ -29,7 +30,7 @@ import (
     "log"
     "net"
     "bytes"
-
+    
     "github.com/aminhusni/hlswatch/state"
 )
 
@@ -200,8 +201,15 @@ func Hls(ctx *state.State, h http.Handler) http.Handler {
             // update the lastseen time, so we can keep track of the viewers
             viewer.LastSeen = time.Now()
             
-            log.Println("Token:",token, "LastSeen:", viewer.LastSeen)
+            // log.Println("Token:",token, "LastSeen:", viewer.LastSeen)
+
+            timeout := time.Duration(ctx.Conf.Common.ViewerTimeout) * time.Second
+            currentViewers := stream.GetCurrentViewers(timeout)
+    
+            w.Header().Set("Current-Stream-Viewers", strconv.Itoa(currentViewers))
         }
+
+
 
         if strings.Contains(r.URL.String(), "master.m3u8") {
             log.Println("Getting master.m3u8")

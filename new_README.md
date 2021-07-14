@@ -22,7 +22,6 @@ done
 
 
 
-
 Watch Streaming (HLS)
 
 http://players.akamai.com/players/hlsjs?streamUrl=http%3A%2F%2F127.0.0.1%3A8080%2Flive%2Flivestream.m3u8
@@ -40,3 +39,12 @@ start default HTTP callback server:
 multiple bitrate of hls:
 https://github.com/ossrs/srs/issues/463
 https://gist.github.com/jb-alvarado/1e94e313b57caf225127f80812fbd896
+
+
+
+
+Create Certificate
+    sudo docker run -it --rm --name certbot \
+            -v "/etc/letsencrypt:/etc/letsencrypt" \
+            -v "/var/lib/letsencrypt:/var/lib/letsencrypt" \
+            certbot/certbot certonly
