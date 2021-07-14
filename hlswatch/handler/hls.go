@@ -234,7 +234,7 @@ func getStreamName(url string) (string, error) {
     if len(parts) < 2 {
         return "", errors.New("url to short to get stream name")
     }
-
+    log.Println(strings.Join(parts,", "))
     return parts[len(parts)-2], nil
 }
 
