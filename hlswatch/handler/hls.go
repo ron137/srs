@@ -235,7 +235,7 @@ func getStreamName(url string) (string, error) {
         return "", errors.New("url to short to get stream name")
     }
 
-    return parts[0], nil
+    return parts[len(parts)-2], nil
 }
 
 func nextToken() string {
