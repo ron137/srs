@@ -230,12 +230,12 @@ func Hls(ctx *state.State, h http.Handler) http.Handler {
 
 func getStreamName(url string) (string, error) {
     // the first "subdirectory" is the name of the stream
-    parts := strings.Split(strings.Trim(url, "/"), "/")
+    parts := strings.SplitN(strings.Trim(url, "/"), "/", 2)
     if len(parts) < 2 {
         return "", errors.New("url to short to get stream name")
     }
-    log.Println(strings.Join(parts,", "))
-    return parts[len(parts)-2], nil
+
+    return parts[0], nil
 }
 
 func nextToken() string {
