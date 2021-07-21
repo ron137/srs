@@ -26,7 +26,7 @@ import toggleClass from './toggle-class';
     const productionDomain = 'live.hbhstreaming.com'
 
     const liveEndpoint = "https://" + productionDomain + ":1111"
-    const apiEndpoint =  "https://" + productionDomain + ":1985/api/v1/"
+    const apiEndpoint =  "https://" + productionDomain + ":1986/api/v1/"
     // const liveEndpoint = "http://192.168.1.76:8081"
     // const apiEndpoint =  "http://192.168.1.76:1985/api/v1/"
 
