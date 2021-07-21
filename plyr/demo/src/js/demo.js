@@ -22,17 +22,38 @@ import toggleClass from './toggle-class';
   document.addEventListener('DOMContentLoaded', () => {
     const selector = '#player';
     const streamId = getParameterByName('streamId');
-    const source = "https://live.hbhstreaming.com:1111/" + streamId + "/master.m3u8"
-    // const source = "http://localhost:80/livestream/master.m3u8"
-    // var source = "http://kakastream.io:80/livestream/master.m3u8"
+    const oldVersion = getParameterByName('oldVersion');
+    const productionDomain = 'live.hbhstreaming.com'
+
+    const liveEndpoint = "https://" + productionDomain + ":1111"
+    const apiEndpoint =  "https://" + productionDomain + ":1985/api/v1/"
+    // const liveEndpoint = "http://192.168.1.76:8081"
+    // const apiEndpoint =  "http://192.168.1.76:1985/api/v1/"
+
+    
+
+    // Check if current stream is live
+    let xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", apiEndpoint + 'streams', false ); // false for synchronous request
+    xmlHttp.send( null );
+    let responseJson = JSON.parse(xmlHttp.responseText);
+    let isLive = false;
+    for(let i in responseJson.streams) {
+      let stream = responseJson.streams[i];
+      if (stream.name == streamId) {
+        isLive = true;
+        break;
+      }
+    }
 
     const video = document.querySelector('video')
 
     const defaultOptions = {
       fullscreen: { enabled: true, fallback: true, iosNative: true },
-      settings: ['quality'],
-      controls: ['play-large', 'play', 'current-time', 'mute', 'volume', 'settings', 'pip', 'airplay', 'fullscreen'],
-      // speed: { selected: 1, options: [1, 1.5] },
+      settings: ['quality', !isLive? 'speed' : ''],
+      controls: ['play-large', 'play', 'mute', 'volume', 'current-time', !isLive? 'progress': '' , 'settings', 'pip', 'airplay', 'fullscreen'],
+      speed: !isLive? { selected: 1, options: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2] } : {},
+      invertTime: isLive,
       autoplay: true,
       i18n: {
         qualityLabel: {
@@ -41,7 +62,53 @@ import toggleClass from './toggle-class';
       },
     };
 
-    if (Hls.isSupported()) {
+    let source;
+    if (isLive) {
+      source = liveEndpoint + "/" + streamId + "/master.m3u8"
+      // const source = "http://localhost:80/livestream/master.m3u8"
+      // var source = "http://kakastream.io:80/livestream/master.m3u8"
+    } else {
+      if (oldVersion) {
+        source = {
+          type: 'video',
+          title: 'Last Stream',
+          sources: [
+            {
+              src: 'https://live.ie2020.net:8090/video?streamName=' + streamId,
+              type: "video/mp4",
+              size: 720
+            },
+          ]
+        }
+      } else {
+        source = {
+          type: 'video',
+          title: 'Last Stream',
+          sources: [
+            {
+              src: "https://hbhstreaming.s3.eu-central-1.amazonaws.com/live/" + streamId + "/stream-1080p/stream.mp4",
+              type: "video/mp4",
+              size: 1080
+            },
+            {
+              src: "https://hbhstreaming.s3.eu-central-1.amazonaws.com/live/" + streamId + "/stream-720p/stream.mp4",
+              type: "video/mp4",
+              size: 720
+            },
+            {
+              src: "https://hbhstreaming.s3.eu-central-1.amazonaws.com/live/" + streamId + "/stream-360p/stream.mp4",
+              type: "video/mp4",
+              size: 360
+            }
+          ]
+        }
+      }
+    }
+
+    if (Hls.isSupported() && isLive) {
+
+
+
       // For more Hls.js options, see https://github.com/dailymotion/hls.js
 
     //   class loader extends Hls.DefaultConfig.loader {
@@ -57,19 +124,19 @@ import toggleClass from './toggle-class';
     //     }
     // }
     
-
+      
       const hls = new Hls({
         liveSyncDuration: 15,
         liveMaxLatencyDuration: 40,
         maxLiveSyncPlaybackRate: 1.5,
-        liveDurationInfinity: true,
+        liveDurationInfinity: isLive,
         // loader: loader,
         // backBufferLength: 40,
         debug: true,
         appendErrorMaxRetry: Infinity,
         levelLoadingMaxRetry: Infinity,
         // // capLevelToPlayerSize: false,
-        startLevel: -1,
+        startLevel: isLive? -1 : 0,
         xhrSetup: function (xhr, url) {
           xhr.withCredentials = true; // do send cookies
         },
@@ -140,7 +207,8 @@ import toggleClass from './toggle-class';
       const player = new Plyr(selector, defaultOptions);
       player.speed = 1
       window.player = player;
-      video.src = source
+      player.source = source
+      // video.src = source
     }
     
 

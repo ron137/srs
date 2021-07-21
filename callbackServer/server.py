@@ -27,7 +27,6 @@ the api-server is a default demo server for srs to call
 when srs get some event, for example, when client connect
 to srs, srs can invoke the http api of the api-server
 """
-
 import sys
 # reload sys model to enable the getdefaultencoding method.
 reload(sys)
@@ -38,6 +37,50 @@ assert sys.getdefaultencoding().lower() == "utf-8"
 
 import os, json, time, datetime, cherrypy, threading, urllib2, shlex, subprocess
 import cherrypy.process.plugins
+import boto
+import boto.s3
+from boto.s3.key import Key
+
+AWS_ACCESS_KEY_ID = '***REDACTED***'
+AWS_SECRET_ACCESS_KEY = '***REDACTED***'
+
+
+conn = boto.s3.connect_to_region('eu-central-1',
+    aws_access_key_id = AWS_ACCESS_KEY_ID,
+    aws_secret_access_key = AWS_SECRET_ACCESS_KEY,
+    is_secure=True
+    )
+
+bucket_name = 'hbhstreaming'
+
+# Create the bucket only on the first run
+# bucket = conn.create_bucket(bucket_name,
+#     location=boto.s3.connection.Location.EUCentral1)
+
+bucket = conn.get_bucket(bucket_name)
+
+bucket_policy = json.dumps({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicRead",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:GetObjectVersion"
+            ],
+            "Resource": "arn:aws:s3:::" + bucket_name + "/*"
+        }
+    ]
+})
+
+bucket.set_policy(bucket_policy)
+
+# cors_configuration = boto.s3.cors.CORSConfiguration()
+# cors_configuration.add_rule('GET', '*')
+# bucket.set_cors(cors_configuration)
+
 
 # simple log functions.
 def trace(msg):
@@ -298,6 +341,25 @@ class RESTDvrs(object):
     def OPTIONS(self, *args, **kwargs):
         enable_crossdomain()
 
+    def __upload_dvr_to_s3(self, file, app, streamId, vhost):
+        key = Key(bucket)
+        bucket_path = app + '/' + streamId + '/' + vhost 
+        file_key = bucket_path + '/stream.mp4'
+        secondry_file_key = bucket_path + '/' + format(round(time.time()*1000),'f').split('.')[0] + '.mp4'
+        s3_file = bucket.get_key(file_key)
+        if s3_file:
+            if os.path.getsize(file) > s3_file.size:
+                bucket.copy_key(secondry_file_key, bucket_name, file_key)
+                s3_file.delete()
+                key.key = file_key
+            else:
+                key.key = secondry_file_key
+        else:
+            key.key = file_key
+        key.set_contents_from_filename(file)
+        
+        
+
     def __on_dvr(self, req):
         code = Error.success
 
@@ -306,7 +368,10 @@ class RESTDvrs(object):
             req["cwd"], req["file"]
         ))
 
-        # TODO: process the on_dvr event
+        # Upload to s3
+        self.__upload_dvr_to_s3(req["file"], req["app"], req["stream"], req["vhost"])
+        # Delete file
+        os.remove(req["file"])
 
         return code
 
@@ -836,6 +901,8 @@ class Root(object):
 class Api(object):
     exposed = True
 
+    
+
     def __init__(self):
         self.v1 = V1()
     def GET(self):
@@ -1050,7 +1117,7 @@ conf = {
         'tools.encode.on': True,
         'tools.staticdir.on': True,
         'tools.encode.encoding': "utf-8",
-        #'server.thread_pool': 2, # single thread server.
+        'server.thread_pool': 4, # single thread server.
     },
     '/': {
         'tools.staticdir.dir': static_dir,

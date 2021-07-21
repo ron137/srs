@@ -4,6 +4,8 @@ services:
         build: "./callbackServer"
         ports:
             - "8085:8085"
+        volumes:
+            - hls_path:/app/objs/nginx/html
     hlswatch:
         build: "./hlswatch"
         ports:
