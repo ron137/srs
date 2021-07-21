@@ -109,7 +109,8 @@ class Error:
     request_invalid_action = 200
     # cdn node not exists
     cdn_node_not_exists = 201
-
+    # access denied 
+    access_denied = 403
 '''
 handle the clients requests: connect/disconnect vhost/app.
 '''
@@ -270,9 +271,12 @@ class RESTStreams(object):
             req["action"], req["client_id"], req["ip"], req["vhost"], req["app"], req["stream"], req["param"]
         ))
 
+        token = 'A9FryxceScXhnhxychG9CjbdpP8aQ7ax'
         # TODO: process the on_publish event
-
-        return code
+        if token in req['param']:
+            return code
+        else:
+            return Error.access_denied
 
     def __on_unpublish(self, req):
         code = Error.success
