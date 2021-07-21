@@ -205,10 +205,14 @@ import toggleClass from './toggle-class';
     } else {
       // default options with no quality update in case Hls is not supported
       const player = new Plyr(selector, defaultOptions);
-      player.speed = 1
       window.player = player;
-      player.source = source
-      // video.src = source
+      player.speed = 1
+
+      if (isLive) {
+        video.src = source        
+      } else {
+        player.source = source
+      }
     }
     
 
