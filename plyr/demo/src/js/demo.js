@@ -22,7 +22,7 @@ import toggleClass from './toggle-class';
   document.addEventListener('DOMContentLoaded', () => {
     const selector = '#player';
     const streamId = getParameterByName('streamId');
-    const oldVersion = getParameterByName('oldVersion');
+    let oldVersion = getParameterByName('oldVersion') == '1';
     const productionDomain = 'live.hbhstreaming.com'
 
     const liveEndpoint = "https://" + productionDomain + ":1111"
