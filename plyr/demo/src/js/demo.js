@@ -128,7 +128,7 @@ import toggleClass from './toggle-class';
       const hls = new Hls({
         liveSyncDuration: 15,
         liveMaxLatencyDuration: 40,
-        maxLiveSyncPlaybackRate: 1.5,
+        maxLiveSyncPlaybackRate: 1.1,
         liveDurationInfinity: isLive,
         // loader: loader,
         // backBufferLength: 40,
