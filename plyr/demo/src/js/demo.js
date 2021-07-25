@@ -10,7 +10,6 @@ import 'url-polyfill';
 
 import * as Sentry from '@sentry/browser';
 import Shr from 'shr-buttons';
-import Hls from 'hls.js'
 
 import Plyr from '../../../src/js/plyr';
 import sources from './sources';
@@ -21,15 +20,17 @@ import toggleClass from './toggle-class';
 
   document.addEventListener('DOMContentLoaded', () => {
     const selector = '#player';
-    const streamId = getParameterByName('streamId');
+    const streamId = getParameterByName('streamId') || '4107';
     let oldVersion = getParameterByName('oldVersion') == '1';
-    const productionDomain = 'live.hbhstreaming.com'
+    const productionDomain = 'live.hbhstreaming.com';
+    
+    
+    const liveEndpoint = "https://" + productionDomain + ":1111/";
+    const apiEndpoint =  "https://" + productionDomain + ":1986/api/v1/";
+    // const liveEndpoint = "http://localhost:8081/"
+    // const apiEndpoint =  "http://localhost:1985/api/v1/"
 
-    const liveEndpoint = "https://" + productionDomain + ":1111"
-    const apiEndpoint =  "https://" + productionDomain + ":1986/api/v1/"
-    // const liveEndpoint = "http://192.168.1.76:8081"
-    // const apiEndpoint =  "http://192.168.1.76:1985/api/v1/"
-
+    const mediaEndpoint = "https://media.hbhstreaming.com/"
     
 
     // Check if current stream is live
@@ -64,7 +65,7 @@ import toggleClass from './toggle-class';
 
     let source;
     if (isLive) {
-      source = liveEndpoint + "/" + streamId + "/master.m3u8"
+      source = liveEndpoint + streamId + "/master.m3u8"
       // const source = "http://localhost:80/livestream/master.m3u8"
       // var source = "http://kakastream.io:80/livestream/master.m3u8"
     } else {
@@ -86,17 +87,17 @@ import toggleClass from './toggle-class';
           title: 'Last Stream',
           sources: [
             {
-              src: "https://hbhstreaming.s3.eu-central-1.amazonaws.com/live/" + streamId + "/stream-1080p/stream.mp4",
+              src: mediaEndpoint + "live/" + streamId + "/stream-1080p/stream.mp4",
               type: "video/mp4",
               size: 1080
             },
             {
-              src: "https://hbhstreaming.s3.eu-central-1.amazonaws.com/live/" + streamId + "/stream-720p/stream.mp4",
+              src: mediaEndpoint + "live/" + streamId + "/stream-720p/stream.mp4",
               type: "video/mp4",
               size: 720
             },
             {
-              src: "https://hbhstreaming.s3.eu-central-1.amazonaws.com/live/" + streamId + "/stream-360p/stream.mp4",
+              src: mediaEndpoint + "live/" + streamId + "/stream-360p/stream.mp4",
               type: "video/mp4",
               size: 360
             }

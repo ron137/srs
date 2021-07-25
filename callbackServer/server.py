@@ -39,6 +39,7 @@ import os, json, time, datetime, cherrypy, threading, urllib2, shlex, subprocess
 import cherrypy.process.plugins
 import boto
 import boto.s3
+from boto.s3.connection import OrdinaryCallingFormat
 from boto.s3.key import Key
 
 AWS_ACCESS_KEY_ID = '***REDACTED***'
@@ -48,10 +49,11 @@ AWS_SECRET_ACCESS_KEY = '***REDACTED***'
 conn = boto.s3.connect_to_region('eu-central-1',
     aws_access_key_id = AWS_ACCESS_KEY_ID,
     aws_secret_access_key = AWS_SECRET_ACCESS_KEY,
-    is_secure=True
+    is_secure=True,
+    calling_format=OrdinaryCallingFormat()
     )
 
-bucket_name = 'hbhstreaming'
+bucket_name = 'media.hbhstreaming.com'
 
 # Create the bucket only on the first run
 # bucket = conn.create_bucket(bucket_name,

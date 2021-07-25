@@ -1,12 +1,12 @@
 {
   "cdn": {
-    "bucket": "plyr",
-    "domain": "cdn.plyr.io",
-    "region": "us-east-1"
+    "bucket": "cdn.hbhstreaming.com",
+    "domain": "cdn.hbhstreaming.com",
+    "region": "eu-central-1"
   },
   "demo": {
-    "bucket": "plyr.io",
-    "domain": "plyr.io",
-    "region": "us-west-1"
+    "bucket": "player.hbhstreaming.com",
+    "domain": "player.hbhstreaming.com",
+    "region": "eu-central-1"
   }
 }
