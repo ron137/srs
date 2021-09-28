@@ -30,7 +30,7 @@ import toggleClass from './toggle-class';
     // const liveEndpoint = "http://localhost:8081/"
     // const apiEndpoint =  "http://localhost:1985/api/v1/"
 
-    const mediaEndpoint = "https://media.hbhstreaming.com/"
+    const mediaEndpoint = "https://s3.eu-central-1.amazonaws.com/media.hbhstreaming.com/"
     
 
     // Check if current stream is live
@@ -54,6 +54,9 @@ import toggleClass from './toggle-class';
       settings: ['quality', !isLive? 'speed' : ''],
       controls: ['play-large', 'play', 'mute', 'volume', 'current-time', !isLive? 'progress': '' , 'settings', 'pip', 'airplay', 'fullscreen'],
       speed: !isLive? { selected: 1, options: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2] } : {},
+      quality: {
+        default: 1080
+      },
       invertTime: isLive,
       autoplay: true,
       i18n: {
